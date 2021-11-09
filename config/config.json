@@ -1,0 +1,23 @@
+{
+  "development": {
+    "username": "root",
+    "password": "wl0328",
+    "database": "smartmeal",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  },
+  "test": {
+    "username": "root",
+    "password": "wl0328",
+    "database": "smartmeal",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  },
+  "production": {
+    "username": "root",
+    "password": "wl0328",
+    "database": "smartmeal",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  }
+}

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+
+    <% if(user.user_id){ %>
+    <form action="/users/update" method="post">
+        <table>
+            <tr>
+                <td> 이름 : </td>
+                <td><input type="text" name="user_name" value="<%= user.user_name %>"></td>  
+            </tr>
+            <tr>
+                <td>아이디 : </td>
+                <td><input type="text" name="user_id" value="<%= user.user_id %>" readonly></td>
+            </tr>
+            
+            <tr>
+                <td>비번 : </td>
+                <td><input type="password" name="password" value="" required></td>
+            </tr>
+            
+            <tr>
+                <td><input type="submit" value="수정"></td>
+            </tr>
+            
+        </table>
+    </form>
+
+
+    <% } else{ %>
+        <form action="/users/update" method="get">
+            <h3>로그인이 안되있음</h3>
+        </form>
+        <% } %>
+</body>
+</html>        
+
