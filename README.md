@@ -4,7 +4,7 @@ router에서 user.js파일에 사용자 관련 api
 
 
 
-##모듈 설치 및 터미널 입력
+## 모듈 설치 및 터미널 입력
 
 npm install –g express-generator
 express smartmeal
