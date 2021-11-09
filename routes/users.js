@@ -39,7 +39,7 @@ router.post("/sign_up", async function(req,res,next){
 
 
 //아이디 중복확인
-router.get('/check_id',async function(req, res, next) {
+router.post('/check_id',async function(req, res, next) {
   
   let body = req.body;
 
@@ -57,7 +57,7 @@ router.get('/check_id',async function(req, res, next) {
 
 
 //닉네임 중복확인
-router.get('/check_name',async function(req, res, next) {
+router.post('/check_name',async function(req, res, next) {
   
   let body = req.body;
 
