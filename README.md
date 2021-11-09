@@ -1,6 +1,6 @@
 # smartmeal_back
 
-routes에서 user.js파일에 사용자 관련 api  
+routes에서 users.js파일에 사용자 관련 api  
 localhost:8080/users/~ 로 접근
 
 
