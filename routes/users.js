@@ -4,12 +4,10 @@ const models = require("../models");
 const crypto = require('crypto');
 
 
-
 //회원가입
 router.post("/sign_up", async function(req,res,next){
   let body = req.body;
   
-
   let salt = Math.round((new Date().valueOf() * Math.random())) + ""; //암호화에 필요
   let hashPassword = crypto.createHash("sha512").update(body.password + salt).digest("hex"); //암호화
 
@@ -22,9 +20,12 @@ router.post("/sign_up", async function(req,res,next){
     salt: salt,
     recent_login:new Date() //최신 로그인 날짜 갱신 
 
-  }).then( result => {  
+  })
+  .then( result => {
     return res.send({ msg:true })
-  }).catch( err => { 
+  })
+  .catch( err => {
+    console.log(err)
     return res.send({ msg:false })
   });
 
@@ -40,8 +41,10 @@ router.post('/check_id',async function(req, res, next) {
     where: {user_id : body.user_id}
   });
 
-  if (user!=undefined) { //아이디가 이미 있으면 
-    return res.send({ msg:true })
+  if (user!=undefined) { //아이디가 이미 있으면     
+    return res
+      .status(409)
+      .send({ msg: true });
   }
 
   else
@@ -59,10 +62,13 @@ router.post('/check_name',async function(req, res, next) {
   });
 
   if (user!=undefined) { //닉네임이 이미 있으면 
-    return res.send({ msg:true })
+    return res
+      .status(409)
+      .send({ msg: true });
   }
-  else
+  else{
     return res.send({ msg:false })
+  }
 });
 
 
