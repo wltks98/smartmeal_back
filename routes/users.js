@@ -12,10 +12,6 @@ router.get('/sign_up', function(req, res, next) {
 router.post("/sign_up", async function(req,res,next){
   let body = req.body;
   
-  let user=await models.user.findOne({
-    where: {user_id : body.user_id}
-  });
-
 
   let salt = Math.round((new Date().valueOf() * Math.random())) + ""; //암호화에 필요
   let hashPassword = crypto.createHash("sha512").update(body.password + salt).digest("hex"); //암호화
