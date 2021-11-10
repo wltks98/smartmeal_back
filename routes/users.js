@@ -3,12 +3,9 @@ var router = express.Router();
 const models = require("../models");
 const crypto = require('crypto');
 
+
+
 //회원가입
-router.get('/sign_up', function(req, res, next) {
-  res.render("user/signup");
-});
-
-
 router.post("/sign_up", async function(req,res,next){
   let body = req.body;
   
@@ -69,18 +66,8 @@ router.post('/check_name',async function(req, res, next) {
 });
 
 
-//로그인 GET
-router.get('/login', function(req, res, next) {
-  
-  let session = req.session;
 
-    res.render("user/login", {
-        session : session
-    });
-});
-
-
-// 로그인 POST
+// 로그인 
 router.post("/login", async function(req,res,next){
   let body = req.body;
 
@@ -96,8 +83,8 @@ router.post("/login", async function(req,res,next){
 
   if(dbPassword === hashPassword){
       console.log("비밀번호 일치");
-      // 세션 설정
-      req.session.user_id = body.user_id;
+      
+      req.session.user_id = body.user_id; // 세션 설정
 
       await models.user.update({
         recent_login:new Date()
@@ -105,12 +92,13 @@ router.post("/login", async function(req,res,next){
       where: {user_id: body.user_id}
     })
     
-
+   return res.send({ msg:true })
+    
   }
   else{
       console.log("비밀번호 불일치");
+      return res.send({ msg:false })
   }
-  res.redirect("/users/login");
 });
 
 
@@ -119,7 +107,7 @@ router.get("/logout", function(req,res,next){
   req.session.destroy();
   res.clearCookie('login_session');
 
-  res.redirect("/users/login");
+  res.redirect("/users/login"); //로그인 창으로 이동
 });
 
 
