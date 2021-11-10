@@ -107,7 +107,7 @@ router.get("/logout", function(req,res,next){
   req.session.destroy();
   res.clearCookie('login_session');
 
-  res.redirect("/users/login"); //로그인 창으로 이동
+  res.redirect("/users/login"); //로그인 창으로 이동 (추후 수정)
 });
 
 
