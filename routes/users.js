@@ -196,7 +196,7 @@ router.post("/delete",async function(req,res,next){
 
 
 //회원정보 받는 api
-router.get("/user_id",async function(req,res,next){
+router.get("/info",async function(req,res,next){
 
   let session=req.session;
   let user_id=session.user_id;
