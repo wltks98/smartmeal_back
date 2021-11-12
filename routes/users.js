@@ -85,7 +85,7 @@ router.post("/login", async function(req,res,next){
 
 
   if(!user){
-    return res.send({msg:"id"})
+    return res.send({msg:"id"}) //아이디가 잘못됨
   }
 
 
