@@ -3,11 +3,11 @@ var router = express.Router();
 const models = require("../models");
 const crypto = require('crypto');
 
-
 //회원가입
 router.post("/sign_up", async function(req,res,next){
   let body = req.body;
-  
+ 
+
   let salt = Math.round((new Date().valueOf() * Math.random())) + ""; //암호화에 필요
   let hashPassword = crypto.createHash("sha512").update(body.password + salt).digest("hex"); //암호화
 
@@ -77,14 +77,20 @@ router.post('/check_name',async function(req, res, next) {
 router.post("/login", async function(req,res,next){
   let body = req.body;
 
-  let result = await models.user.findOne({
+  let user = await models.user.findOne({
       where: {
           user_id : body.user_id
       }
   });
 
-  let dbPassword = result.dataValues.password;
-  let salt = result.dataValues.salt;
+
+  if(!user){
+    return res.send({msg:"id"})
+  }
+
+
+  let dbPassword = user.dataValues.password;
+  let salt = user.dataValues.salt;
   let hashPassword = crypto.createHash("sha512").update(body.password + salt).digest("hex");
 
   if(dbPassword === hashPassword){
@@ -98,12 +104,11 @@ router.post("/login", async function(req,res,next){
       where: {user_id: body.user_id}
     })
     
-   return res.send({ msg:true })
-    
+    return res.send({ msg:"success" })
   }
   else{
       console.log("비밀번호 불일치");
-      return res.send({ msg:false })
+      return res.send({ msg:"password" })
   }
 });
 
@@ -113,33 +118,11 @@ router.get("/logout", function(req,res,next){
   req.session.destroy();
   res.clearCookie('login_session');
 
-  res.redirect("/users/login"); //로그인 창으로 이동 (추후 수정)
+  //res.redirect("/users/login");
 });
 
 
-//수정
-router.get("/update", function(req,res,next){
-
-  let session = req.session;
-
-  models.user.findOne({
-    where: {user_id : session.user_id}
-  })
-  .then( result => {
-    res.render("user/update", {
-      user: result
-    });
-  })
-  .catch( err => { 
-    console.log("err");
-    console.log("데이터 조회 실패");
-  });
-
-  
-});
-
-
-//수정
+//회원 수정
 router.post("/update", function(req,res,next){
 
   let body = req.body;
@@ -157,41 +140,36 @@ router.post("/update", function(req,res,next){
   })
   .then( result => {
     console.log("데이터 수정 완료");
-    res.redirect("/users/login");
+    return res.send({ msg:true })
   })
   .catch( err => {
     console.log("데이터 수정 실패");
+    console.log(err);
+    return res.send({ msg:false })
   });
 
 
-  //res.redirect("/users/login");
 })
 
 
 //탈퇴
-router.get("/delete",async function(req,res,next){
-
-  res.render("user/delete");
-})
-
-
 router.post("/delete",async function(req,res,next){
 
   let session=req.session;
 
   let body = req.body;
 
-  let result = await models.user.findOne({
+  let user = await models.user.findOne({
     where: {
         user_id : session.user_id
     }
   });
 
-  let dbPassword = result.dataValues.password;
-  let salt = result.dataValues.salt;
+  let dbPassword = user.dataValues.password;
+  let salt = user.dataValues.salt;
   let hashPassword = crypto.createHash("sha512").update(body.password + salt).digest("hex");
 
-  if(dbPassword === hashPassword){
+  if(dbPassword == hashPassword){
       console.log("비밀번호 일치");
 
       await models.user.destroy({
@@ -202,14 +180,15 @@ router.post("/delete",async function(req,res,next){
        res.clearCookie('login_session');
     
        console.log("데이터 삭제 완료");
-       res.send("회원탈퇴");
+
+       return res.send({ msg:true })
      })
      .catch( err => {
-       console.log("데이터 삭제 실패");
+      return res.send({ msg:false })
      });
-    
-    
-
+  }
+  else{
+    return res.send({ msg:false })
   }
 
  
@@ -219,50 +198,30 @@ router.post("/delete",async function(req,res,next){
 //회원정보 받는 api
 router.get("/user_id",async function(req,res,next){
 
-
-
-  res.render("user/search");
-})
-
-
-
-router.post("/user_id",async function(req,res,next){
-
-  let body = req.body;
-  let user_id=body.user_id;
-
-  let user = await User.findOne({ user_id });
-
-  res.render("user/user_infor",{user: user});
-})
-
-
-//인바디 입력
-router.get("/inbody",async function(req,res,next){
-
-  let session = req.session;
-
-
+  let session=req.session;
+  let user_id=session.user_id;
 
   models.user.findOne({
-     user_id : session.user_id
-   })
-   .then( result => {
-     console.log(result.user_id)
-     res.render("user/inbody", {
-       user: result
-     });
-   })
-   .catch( err => {
-     console.log(session.user_id);
-     console.log("err");
-     console.log("데이터 조회 실패");
-   });
+    where: {user_id : user_id}
+  })
+  .then( result => {
+    return res.send( {
+      user: result,
+      msg:true
+    });
+  })
+  .catch( err => { 
+    return res.send( {
+      msg:false
+    });
+    console.log(err);
+  });
 
 })
 
 
 
+//인바디 수정
 router.post("/inbody",async function(req,res,next){
 
   let session = req.session;
@@ -274,18 +233,18 @@ router.post("/inbody",async function(req,res,next){
   });
   
 
-  let w=Number(body.weight);
-  let h=Number(body.height);
-  let m=Number(body.muscle);
-  let f=Number(body.fat);
-  let g=body.gender;
+  let w=Number(body.weight); //체중
+  let h=Number(body.height); //키
+  let m=Number(body.muscle); //골격근량
+  let f=Number(body.fat); //체지방률
+  let g=body.gender; //성별
 
   let ff,bb,mm; //1은 표준이하 2는 표준 3은 표준이상
-  let inbody_type;
+  let inbody_type; //인바디 유형
 
 
-  let bmi=w/Math.pow((h/100),2);
-  console.log(bmi);
+  let bmi=w/Math.pow((h/100),2); //bmi 계산
+  
   if (g=='남'){
     if(f<15.0)
       ff=1;
@@ -375,12 +334,15 @@ router.post("/inbody",async function(req,res,next){
  })
  .then( result => {
    console.log("데이터 수정 완료");
-   res.render("user/inbody_result", {
-    inbody_type:inbody_type
+   return res.send({
+    inbody_type:inbody_type,
+    msg:true
   });
  })
  .catch( err => {
    console.log("데이터 수정 실패");
+   console.log(err);
+   return res.send({ msg:false })
  });
 
   
