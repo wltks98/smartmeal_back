@@ -118,7 +118,7 @@ router.get("/logout", function(req,res,next){
   req.session.destroy();
   res.clearCookie('login_session');
 
-  //res.redirect("/users/login");
+  res.redirect("/");
 });
 
 
