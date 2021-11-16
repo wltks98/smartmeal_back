@@ -210,11 +210,12 @@ router.get("/info",async function(req,res,next){
       msg:true
     });
   })
-  .catch( err => { 
+  .catch( err => {
+    console.log(err);
     return res.send( {
       msg:false
     });
-    console.log(err);
+
   });
 
 })
