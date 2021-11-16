@@ -349,5 +349,58 @@ router.post("/inbody",async function(req,res,next){
 })
 
 
+//장바구니 넣기
+router.get("/add_item",async function(req,res,next){
+
+  let session=req.session;
+  let user_id=session.user_id;
+  let body=req.body;
+
+  models.bag.create({
+
+    user_id:user_id,
+    item_id: body.item_id,
+  })
+  .then( result => {
+    return res.send({ msg:true })
+  })
+  .catch( err => {
+    console.log(err)
+    return res.send({ msg:false })
+  });
+
+
+  
+
+})
+
+
+//장바구니 삭제
+router.get("/delete_item",async function(req,res,next){
+
+  let session=req.session;
+  let body=req.body;
+
+  await models.bag.destroy({
+    where: {user_id : session.user_id,
+            item_id:body.item_id
+    }
+ })
+ .then( result => {
+   console.log("장바구니 삭제 완료");
+
+   return res.send({ msg:true })
+ })
+ .catch( err => {
+   console.log(err)
+  return res.send({ msg:false })
+ });
+
+
+  
+
+})
+
+
 
 module.exports = router;
