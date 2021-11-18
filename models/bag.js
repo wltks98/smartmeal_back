@@ -10,10 +10,10 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         references:{model: 'user', key: 'user_id'}
       },
-    item_id: {
+    item_name: {
           type: DataTypes.STRING,
           allowNull: false,
-          references:{model: 'item', key: 'item_id'}
+          references:{model: 'item', key: 'item_name'}
          
     },
 
