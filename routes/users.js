@@ -402,6 +402,32 @@ router.get("/delete_bag",async function(req,res,next){
 
 })
 
+//장바구니 불러오기
+router.get("/list_bag",async function(req,res,next){
 
+  let session=req.session;
+
+
+  models.bag.findAll({
+    where: {user_id : session.user_id}
+  })
+  .then( result => {
+
+    baglist=[]
+    for(let i=0; i<result.length; i++){
+      baglist.push(result[i].item_id)
+    }
+
+    return res.send( {
+      baglist: baglist
+    });
+  })
+  .catch( err => { 
+    console.log(err);
+    return res.send( {
+      msg:false
+    });
+  });
+})
 
 module.exports = router;
