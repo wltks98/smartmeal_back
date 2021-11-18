@@ -84,8 +84,10 @@ router.post("/login", async function(req,res,next){
   });
 
 
-  if(!user){
-    return res.send({msg:"id"}) //아이디가 잘못됨
+  if(!user){        //아이디가 잘못됨
+    return res     
+    .status(404)
+    .send()
   }
 
 
@@ -104,11 +106,15 @@ router.post("/login", async function(req,res,next){
       where: {user_id: body.user_id}
     })
     
-    return res.send({ msg:"success" })
+    return res
+    .status(200)
+    .json({user_id:body.user_id})
   }
   else{
       console.log("비밀번호 불일치");
-      return res.send({ msg:"password" })
+      return res
+      .status(401)
+      .send()
   }
 });
 
@@ -215,7 +221,6 @@ router.get("/info",async function(req,res,next){
     return res.send( {
       msg:false
     });
-
   });
 
 })
