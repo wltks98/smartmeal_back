@@ -351,7 +351,7 @@ router.post("/inbody",async function(req,res,next){
 
 
 //장바구니 넣기
-router.get("/add_item",async function(req,res,next){
+router.get("/add_bag",async function(req,res,next){
 
   let session=req.session;
   let user_id=session.user_id;
@@ -377,7 +377,7 @@ router.get("/add_item",async function(req,res,next){
 
 
 //장바구니 삭제
-router.get("/delete_item",async function(req,res,next){
+router.get("/delete_bag",async function(req,res,next){
 
   let session=req.session;
   let body=req.body;
