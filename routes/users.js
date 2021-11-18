@@ -360,7 +360,7 @@ router.get("/add_bag",async function(req,res,next){
   models.bag.create({
 
     user_id:user_id,
-    item_id: body.item_id,
+    item_name: body.item_name,
   })
   .then( result => {
     return res.send({ msg:true })
@@ -384,7 +384,7 @@ router.get("/delete_bag",async function(req,res,next){
 
   await models.bag.destroy({
     where: {user_id : session.user_id,
-            item_id:body.item_id
+            item_name:body.item_name
     }
  })
  .then( result => {
@@ -415,7 +415,7 @@ router.get("/list_bag",async function(req,res,next){
 
     baglist=[]
     for(let i=0; i<result.length; i++){
-      baglist.push(result[i].item_id)
+      baglist.push(result[i].item_name)
     }
 
     return res.send( {
