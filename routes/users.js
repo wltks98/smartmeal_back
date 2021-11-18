@@ -356,7 +356,7 @@ router.post("/inbody",async function(req,res,next){
 
 
 //장바구니 넣기
-router.get("/add_bag",async function(req,res,next){
+router.post("/add_bag",async function(req,res,next){
 
   let session=req.session;
   let user_id=session.user_id;
