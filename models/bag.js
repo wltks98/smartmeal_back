@@ -8,16 +8,19 @@ module.exports = (sequelize, DataTypes) => {
     user_id: {
         type: DataTypes.STRING,
         allowNull: false,
-        references:{model: 'user', key: 'user_id'}
       },
     item_name: {
           type: DataTypes.STRING,
-          allowNull: false,
-          references:{model: 'item', key: 'item_name'}
-         
+          allowNull: false,   
+    },
+    item_count: {
+      type: DataTypes.INTEGER,
+    },
+    item_price: {
+      type: DataTypes.INTEGER,
     },
 
-      
+    
   });
   return bag;
 };

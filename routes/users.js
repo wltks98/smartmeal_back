@@ -124,7 +124,7 @@ router.get("/logout", function(req,res,next){
   req.session.destroy();
   res.clearCookie('login_session');
 
-  res.redirect("/");
+  res.redirect("/")
 });
 
 
@@ -135,7 +135,7 @@ router.post("/update", function(req,res,next){
 
   let salt = Math.round((new Date().valueOf() * Math.random())) + "";
   let hashPassword = crypto.createHash("sha512").update(body.password + salt).digest("hex");
-
+  
   models.user.update({
       user_name: body.user_name,
       user_id: body.user_id,
@@ -216,7 +216,7 @@ router.get("/info",async function(req,res,next){
       msg:true
     });
   })
-  .catch( err => {
+  .catch( err => { 
     console.log(err);
     return res.send( {
       msg:false
@@ -355,34 +355,68 @@ router.post("/inbody",async function(req,res,next){
 })
 
 
+
 //장바구니 넣기
-router.get("/add_bag",async function(req,res,next){
+router.post("/add_bag",async function(req,res,next){
 
   let session=req.session;
   let user_id=session.user_id;
   let body=req.body;
 
-  models.bag.create({
 
-    user_id:user_id,
-    item_name: body.item_name,
-  })
-  .then( result => {
-    return res.send({ msg:true })
-  })
-  .catch( err => {
-    console.log(err)
-    return res.send({ msg:false })
+  let bag=await models.bag.findOne({
+    where: {
+      user_id : session.user_id,
+      item_name: body.item_name
+    }
   });
 
 
+  if (bag!=undefined) { //장바구니에 이미 있으면 갯수만 늘림
+
+    let update_count=bag.item_count+body.item_count
+
+    models.bag.update({
+      item_count: update_count
+  },{
+    where: {
+      user_id : session.user_id,
+      item_name: body.item_name}
+    })
+    .then( result => {
+      return res.send({ msg:true })
+    })
+    .catch( err => {
+      console.log(err)
+      return res.send({ msg:false })
+    });
   
+  }
+  else{ //장바구니에 있던게 아니면 
+    models.bag.create({
+
+      user_id:user_id,
+      item_name: body.item_name,
+      item_count:body.item_count,
+      item_price:body.item_price
+    })
+    .then( result => {
+      return res.send({ msg:true })
+    })
+    .catch( err => {
+      console.log(err)
+      return res.send({ msg:false })
+    });
+  }
+
+
+
 
 })
 
 
 //장바구니 삭제
-router.get("/delete_bag",async function(req,res,next){
+router.post("/delete_bag",async function(req,res,next){
 
   let session=req.session;
   let body=req.body;
@@ -393,9 +427,38 @@ router.get("/delete_bag",async function(req,res,next){
     }
  })
  .then( result => {
-   console.log("장바구니 삭제 완료");
 
-   return res.send({ msg:true })
+  models.bag.findAll({
+    where: {user_id : session.user_id}
+  })
+  .then( result => {
+
+    console.log("장바구니 삭제 완료");
+
+    bagList=[]
+    for(let i=0; i<result.length; i++){
+      bagList.push(
+        {
+          "item_name":result[i].item_name,
+          "item_count":result[i].item_count,
+          "item_price":result[i].item_price
+        }
+        
+        )
+    }
+
+    return res.send( {
+      bagList: bagList
+    });
+  })
+  .catch( err => { 
+    console.log(err);
+    return res.send( {
+      msg:false
+    });
+  });
+
+
  })
  .catch( err => {
    console.log(err)
@@ -407,24 +470,31 @@ router.get("/delete_bag",async function(req,res,next){
 
 })
 
+
 //장바구니 불러오기
 router.get("/list_bag",async function(req,res,next){
 
   let session=req.session;
-
 
   models.bag.findAll({
     where: {user_id : session.user_id}
   })
   .then( result => {
 
-    baglist=[]
+    bagList=[]
     for(let i=0; i<result.length; i++){
-      baglist.push(result[i].item_name)
+      bagList.push(
+        {
+          "item_name":result[i].item_name,
+          "item_count":result[i].item_count,
+          "item_price":result[i].item_price
+        }
+        
+        )
     }
 
     return res.send( {
-      baglist: baglist
+      bagList: bagList
     });
   })
   .catch( err => { 
@@ -433,6 +503,58 @@ router.get("/list_bag",async function(req,res,next){
       msg:false
     });
   });
+
+
 })
+
+
+
+
+//필터 디폴트값
+router.get("/filter_default",async function(req,res,next){
+
+  let session=req.session;
+
+
+  let user=models.user.findOne({
+    where: {user_id : session.user_id}
+  })
+  .catch( err => { 
+    console.log(err);
+  });
+
+  let inbody_type=user.inbody_type;
+
+  let min_tan,min_dan,min_ji;
+  let max_tan,max_dan,max_ji;
+
+  if (inbody_type=='저체중 허약형'){
+    
+  }
+  else if(inbody_type=='과체중 비만형'){
+
+  }
+  else{
+
+  }
+
+  res.json({
+    min_tan:min_tan,
+    min_dan:min_dan,
+    min_ji:min_ji,
+    max_tan:max_tan,
+    max_dan:max_dan,
+    max_ji:max_ji,
+
+  })
+
+  
+
+})
+
+
+
+
+
 
 module.exports = router;
