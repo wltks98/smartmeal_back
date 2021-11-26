@@ -1,5 +1,5 @@
 const express = require("express");
-const foodsData = require("../data/foods.js");
+const foodsData = require("../model/foods.js");
 
 // import express from "express";
 // import * as foodsData from "../data/foods.js";
