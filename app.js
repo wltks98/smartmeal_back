@@ -8,6 +8,9 @@ const session = require('express-session');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+const foodsRouter = require("./routes/foods.js");
+const payRouter = require("./routes/pay.js");
+
 
 var app = express();
 
@@ -42,6 +45,18 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use("/foods", foodsRouter);
+app.use("/pay", payRouter);
+
+
+app.use((req, res, next) => {
+  res.sendStatus(404);
+});
+
+app.use((error, req, res, next) => {
+  console.error(error);
+  res.sendStatus(500);
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
