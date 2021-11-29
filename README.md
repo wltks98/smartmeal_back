@@ -8,7 +8,7 @@ localhost:8080/users/~ 로 접근
 # 모듈 설치 및 터미널 입력
 
 npm install –g express-generator  
-express smartmeal  
+express smartmeal  (이미 되있어서 안해도 됨)
 cd smartmeal  
 npm install  
 npm install -g sequelize-cli  
