@@ -1,6 +1,6 @@
 const express = require("express");
 const Stripe = require("stripe");
-const payData = require("../model/pay.js");
+const payData = require("../models/pay.js");
 
 // import express from "express";
 // import Stripe from "stripe";
