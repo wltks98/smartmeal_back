@@ -19,3 +19,14 @@ food2.sql database에 넣고,
 db.database.js pw설정
 config/config.json에서 db pw설정 
 port# :  3306
+
+# DB 새로 생성해야 함
+create table pay(
+user_id varchar(255) primary key not null,
+customer_id varchar(255)
+);
+
+create table card(
+customer_id varchar(255) not null,
+card_id varchar(255) primary key not null
+);
