@@ -13,7 +13,7 @@ npm install -g sequelize-cli
 sequelize init  
 npm install --save express-session  
 
-#DB 설정
+# DB 설정
 food2.sql database에 넣고,
 db.database.js pw설정
 config/config.json에서 db pw설정 
