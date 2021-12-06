@@ -8,11 +8,13 @@ localhost:8080/users/~ 로 접근
 # 모듈 설치 및 터미널 입력
 
 npm install –g express-generator  
-express smartmeal  (이미 되있어서 안해도 됨)
-cd smartmeal  
 npm install  
 npm install -g sequelize-cli  
 sequelize init  
 npm install --save express-session  
 
-
+#DB 설정
+food2.sql database에 넣고,
+db.database.js pw설정
+config/config.json에서 db pw설정 
+port# :  3306
