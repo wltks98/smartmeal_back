@@ -159,7 +159,7 @@ router.post("/update", function(req,res,next){
 
 
 //탈퇴
-router.post("/delete",async function(req,res,next){
+router.post("/signout",async function(req,res,next){
 
   let session=req.session;
 
