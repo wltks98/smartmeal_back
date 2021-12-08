@@ -251,7 +251,7 @@ router.post("/inbody",async function(req,res,next){
 
   let bmi=w/Math.pow((h/100),2); //bmi 계산
   
-  if (g=='남'){
+  if (g=='남'||g=='남자'){
     if(f<15.0)
       ff=1;
     else if(f>24.9)
@@ -274,7 +274,7 @@ router.post("/inbody",async function(req,res,next){
       mm=2;
   }
 
-  else if (g=='여'){
+  else if (g=='여'||g=='여자'){
     if(f<25.0)
       ff=1;
     else if(f>34.9)
