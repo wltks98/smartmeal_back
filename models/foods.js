@@ -1,6 +1,5 @@
 const db = require("../db/database.js");
 
-// import { db } from "../db/database.js";
 
 const SELECT = "SELECT * from food2";
 
