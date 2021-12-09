@@ -2,14 +2,12 @@ const express = require("express");
 const Stripe = require("stripe");
 const payData = require("../models/pay.js");
 
-// import express from "express";
-// import Stripe from "stripe";
 
 const router = express.Router();
 
 const STRIPE_PUBLISHABLE = "pk_test_TYooMQauvdEDq54NiTphI7jx";
 const STRIPE_SECRET_KEY = "sk_test_4eC39HqLyjWDarjtT1zdp7dc";
-//test KEY
+//STRIPE에서 제공하는 test KEY
 
 const stripe = new Stripe(STRIPE_SECRET_KEY);
 
