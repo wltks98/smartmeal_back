@@ -1,8 +1,6 @@
 const express = require("express");
 const foodsData = require("../models/foods.js");
 
-// import express from "express";
-// import * as foodsData from "../data/foods.js";
 
 const router = express.Router();
 
@@ -44,5 +42,4 @@ router.post("/", rateFood);
 router.get("/f", filterFood);
 router.get("/fs", filtersFood);
 
-// export default router;
 module.exports = router;
