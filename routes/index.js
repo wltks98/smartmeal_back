@@ -7,6 +7,18 @@ router.get("/filter_default",async function(req,res,next){
 
   let session=req.session;
 
+  if(!session.user_id){
+    return res.json({
+      min_tan:0,
+      min_dan:0,
+      min_ji:0,
+      max_tan:100,
+      max_dan:100,
+      max_ji:100,
+      max_cal:1000,
+      min_cal:0
+    })
+  }
 
   let user=models.user.findOne({
     where: {user_id : session.user_id}
